@@ -1,0 +1,27 @@
+name: nante_ads
+description: "Reusable text-only native ads for Flutter (AdMob). Minimal 40dp single-line ads."
+version: 0.0.1
+homepage: https://github.com/nantestudio/nante_ads
+
+environment:
+  sdk: ^3.10.0
+  flutter: '>=3.3.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_mobile_ads: ^5.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.nantestudio.nante_ads
+        pluginClass: NanteAdsPlugin
+      ios:
+        pluginClass: NanteAdsPlugin

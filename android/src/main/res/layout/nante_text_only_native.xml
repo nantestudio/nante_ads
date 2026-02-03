@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="#FF141414">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <!-- Ad badge -->
+        <TextView
+            android:id="@+id/ad_badge"
+            android:layout_width="28dp"
+            android:layout_height="18dp"
+            android:text="Ad"
+            android:textSize="9sp"
+            android:textColor="#B3FFFFFF"
+            android:gravity="center"
+            android:background="@drawable/nante_ad_badge_background"/>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="0dp"/>
+
+        <!-- Headline only - no MediaView -->
+        <TextView
+            android:id="@+id/ad_headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#E6FFFFFF"
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:ellipsize="end"/>
+
+    </LinearLayout>
+
+</com.google.android.gms.ads.nativead.NativeAdView>
