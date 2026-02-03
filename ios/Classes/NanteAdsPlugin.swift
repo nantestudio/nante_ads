@@ -3,14 +3,25 @@ import UIKit
 import google_mobile_ads
 
 /// Factory ID for text-only native ads. Must match Dart constant.
-let kNanteTextOnlyFactoryId = "nanteTextOnly"
+public let kNanteTextOnlyFactoryId = "nanteTextOnly"
 
 public class NanteAdsPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
-        // Register the text-only native ad factory
+        // iOS requires the app to call registerFactory() from AppDelegate
+        // because registerNativeAdFactory needs FlutterPluginRegistry, not FlutterPluginRegistrar
+    }
+
+    /// Call this from your AppDelegate's didFinishLaunchingWithOptions
+    /// after GeneratedPluginRegistrant.register(with: self)
+    ///
+    /// Example:
+    /// ```swift
+    /// NanteAdsPlugin.registerFactory(registry: self)
+    /// ```
+    @objc public static func registerFactory(registry: FlutterPluginRegistry) {
         let factory = TextOnlyNativeAdFactory()
         FLTGoogleMobileAdsPlugin.registerNativeAdFactory(
-            registrar,
+            registry,
             factoryId: kNanteTextOnlyFactoryId,
             nativeAdFactory: factory
         )

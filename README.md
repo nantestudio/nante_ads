@@ -6,7 +6,7 @@ Minimal 40dp single-line native ads for Flutter using Google AdMob.
 
 - **Text-only native ads** - No MediaView, avoids video size requirements
 - **40dp height** - Minimal footprint, perfect for bottom safe area
-- **Auto-registration** - Plugin auto-registers native ad factory
+- **Auto-registration (Android)** - Plugin auto-registers native ad factory
 - **Placeholder rotation** - Shows custom text while ad loads
 - **Safe area support** - `TextNativeAdOverlay` for easy positioning
 
@@ -37,9 +37,11 @@ Add your AdMob App ID to `android/app/src/main/AndroidManifest.xml`:
 </manifest>
 ```
 
+**Android auto-registers the native ad factory - no additional setup needed.**
+
 ### iOS
 
-Add to `ios/Runner/Info.plist`:
+1. Add to `ios/Runner/Info.plist`:
 
 ```xml
 <key>GADApplicationIdentifier</key>
@@ -51,6 +53,29 @@ Add to `ios/Runner/Info.plist`:
         <string>cstr6suwn9.skadnetwork</string>
     </dict>
 </array>
+```
+
+2. **Register the factory in `ios/Runner/AppDelegate.swift`:**
+
+```swift
+import Flutter
+import UIKit
+import nante_ads  // Add this import
+
+@main
+@objc class AppDelegate: FlutterAppDelegate {
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+    GeneratedPluginRegistrant.register(with: self)
+
+    // Register nante_ads native ad factory
+    NanteAdsPlugin.registerFactory(registry: self)
+
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+}
 ```
 
 ## Usage
