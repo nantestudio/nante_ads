@@ -5,6 +5,9 @@ import google_mobile_ads
 /// Factory ID for text-only native ads. Must match Dart constant.
 public let kNanteTextOnlyFactoryId = "nanteTextOnly"
 
+/// Height of the native ad view in points. Must match Dart kTextNativeAdHeight.
+private let kAdHeight: CGFloat = 40.0
+
 public class NanteAdsPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         // iOS requires the app to call registerFactory() from AppDelegate
@@ -41,7 +44,10 @@ class TextOnlyNativeAdFactory: NSObject, FLTNativeAdFactory {
         nativeAdView.translatesAutoresizingMaskIntoConstraints = false
         nativeAdView.backgroundColor = UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1.0)
 
-        // Horizontal stack for content
+        // Set explicit height constraint for the ad view
+        nativeAdView.heightAnchor.constraint(equalToConstant: kAdHeight).isActive = true
+
+        // Horizontal stack for content - centered vertically
         let contentStack = UIStackView()
         contentStack.translatesAutoresizingMaskIntoConstraints = false
         contentStack.axis = .horizontal
@@ -52,8 +58,7 @@ class TextOnlyNativeAdFactory: NSObject, FLTNativeAdFactory {
         NSLayoutConstraint.activate([
             contentStack.leadingAnchor.constraint(equalTo: nativeAdView.leadingAnchor, constant: 12),
             contentStack.trailingAnchor.constraint(equalTo: nativeAdView.trailingAnchor, constant: -12),
-            contentStack.topAnchor.constraint(equalTo: nativeAdView.topAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: nativeAdView.bottomAnchor),
+            contentStack.centerYAnchor.constraint(equalTo: nativeAdView.centerYAnchor),
         ])
 
         // "Ad" badge
