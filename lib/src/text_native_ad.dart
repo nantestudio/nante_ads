@@ -35,6 +35,9 @@ class TextNativeAd {
 
   /// Load the ad.
   Future<void> load() async {
+    if (kDebugMode) {
+      debugPrint('TextNativeAd: loading ad with factoryId=$kTextNativeAdFactoryId, adUnitId=$adUnitId');
+    }
     _nativeAd?.dispose();
     _isLoaded = false;
 
@@ -62,6 +65,9 @@ class TextNativeAd {
     );
 
     await _nativeAd!.load();
+    if (kDebugMode) {
+      debugPrint('TextNativeAd: load() call completed');
+    }
   }
 
   /// Dispose of the ad and release resources.
