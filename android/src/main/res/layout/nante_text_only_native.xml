@@ -5,12 +5,11 @@
     android:background="#FF141414">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp">
+        android:gravity="center_vertical">
 
         <!-- Ad badge -->
         <TextView
@@ -27,16 +26,19 @@
             android:layout_width="16dp"
             android:layout_height="0dp"/>
 
-        <!-- Headline only - no MediaView -->
+        <!-- Headline only - no MediaView, marquee for long text -->
         <TextView
             android:id="@+id/ad_headline"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:maxWidth="280dp"
             android:textColor="#E6FFFFFF"
             android:textSize="12sp"
             android:singleLine="true"
-            android:ellipsize="end"/>
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
 
     </LinearLayout>
 

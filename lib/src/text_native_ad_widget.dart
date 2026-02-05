@@ -135,9 +135,9 @@ class _TextNativeAdWidgetState extends State<TextNativeAdWidget> {
   }
 
   Widget _buildPlaceholder() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+    return Center(
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           // "Ad" badge placeholder
           Container(
@@ -157,8 +157,9 @@ class _TextNativeAdWidgetState extends State<TextNativeAdWidget> {
             ),
           ),
           const SizedBox(width: 16),
-          // Rotating placeholder text
-          Expanded(
+          // Rotating placeholder text with max width
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 280),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               child: Text(

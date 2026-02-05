@@ -56,8 +56,7 @@ class TextOnlyNativeAdFactory: NSObject, FLTNativeAdFactory {
         nativeAdView.addSubview(contentStack)
 
         NSLayoutConstraint.activate([
-            contentStack.leadingAnchor.constraint(equalTo: nativeAdView.leadingAnchor, constant: 12),
-            contentStack.trailingAnchor.constraint(equalTo: nativeAdView.trailingAnchor, constant: -12),
+            contentStack.centerXAnchor.constraint(equalTo: nativeAdView.centerXAnchor),
             contentStack.centerYAnchor.constraint(equalTo: nativeAdView.centerYAnchor),
         ])
 
@@ -78,18 +77,91 @@ class TextOnlyNativeAdFactory: NSObject, FLTNativeAdFactory {
         ])
         contentStack.addArrangedSubview(adBadge)
 
-        // Headline only - no MediaView
-        let headlineLabel = UILabel()
+        // Headline only - no MediaView, with marquee for long text
+        let headlineLabel = MarqueeLabel()
         headlineLabel.translatesAutoresizingMaskIntoConstraints = false
         headlineLabel.text = nativeAd.headline
         headlineLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         headlineLabel.textColor = UIColor.white.withAlphaComponent(0.9)
-        headlineLabel.numberOfLines = 1
-        headlineLabel.lineBreakMode = .byTruncatingTail
+        headlineLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 280).isActive = true
         contentStack.addArrangedSubview(headlineLabel)
         nativeAdView.headlineView = headlineLabel
 
+        // Start marquee animation after a short delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            headlineLabel.startScrolling()
+        }
+
         nativeAdView.nativeAd = nativeAd
         return nativeAdView
+    }
+}
+
+/// A UILabel subclass that scrolls text horizontally if it overflows.
+class MarqueeLabel: UILabel {
+    private var scrollTimer: Timer?
+    private var scrollOffset: CGFloat = 0
+    private let scrollSpeed: CGFloat = 30 // points per second
+    private let pauseDuration: TimeInterval = 2.0
+    private var textWidth: CGFloat = 0
+    private var isPaused = true
+
+    override var text: String? {
+        didSet {
+            textWidth = intrinsicContentSize.width
+            scrollOffset = 0
+            isPaused = true
+        }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        textWidth = intrinsicContentSize.width
+    }
+
+    func startScrolling() {
+        guard textWidth > bounds.width else { return }
+        scrollTimer?.invalidate()
+        scrollOffset = 0
+        isPaused = true
+
+        // Pause before starting
+        DispatchQueue.main.asyncAfter(deadline: .now() + pauseDuration) { [weak self] in
+            self?.isPaused = false
+            self?.scrollTimer = Timer.scheduledTimer(withTimeInterval: 1.0/60.0, repeats: true) { [weak self] _ in
+                self?.updateScroll()
+            }
+        }
+    }
+
+    private func updateScroll() {
+        guard !isPaused, textWidth > bounds.width else { return }
+
+        scrollOffset += scrollSpeed / 60.0
+        let maxScroll = textWidth - bounds.width + 20 // 20pt extra padding
+
+        if scrollOffset >= maxScroll {
+            // Pause at the end, then reset
+            isPaused = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + pauseDuration) { [weak self] in
+                self?.scrollOffset = 0
+                self?.setNeedsDisplay()
+                DispatchQueue.main.asyncAfter(deadline: .now() + self!.pauseDuration) { [weak self] in
+                    self?.isPaused = false
+                }
+            }
+        }
+        setNeedsDisplay()
+    }
+
+    override func drawText(in rect: CGRect) {
+        var adjustedRect = rect
+        adjustedRect.origin.x -= scrollOffset
+        adjustedRect.size.width = textWidth
+        super.drawText(in: adjustedRect)
+    }
+
+    deinit {
+        scrollTimer?.invalidate()
     }
 }
