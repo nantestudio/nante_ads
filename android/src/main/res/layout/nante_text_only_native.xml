@@ -24,7 +24,7 @@
             android:background="@drawable/nante_ad_badge_background"/>
 
         <View
-            android:layout_width="10dp"
+            android:layout_width="16dp"
             android:layout_height="0dp"/>
 
         <!-- Headline only - no MediaView -->

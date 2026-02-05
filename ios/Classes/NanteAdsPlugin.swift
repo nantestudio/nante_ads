@@ -52,7 +52,7 @@ class TextOnlyNativeAdFactory: NSObject, FLTNativeAdFactory {
         contentStack.translatesAutoresizingMaskIntoConstraints = false
         contentStack.axis = .horizontal
         contentStack.alignment = .center
-        contentStack.spacing = 10
+        contentStack.spacing = 16
         nativeAdView.addSubview(contentStack)
 
         NSLayoutConstraint.activate([

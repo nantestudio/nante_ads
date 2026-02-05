@@ -156,7 +156,7 @@ class _TextNativeAdWidgetState extends State<TextNativeAdWidget> {
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 16),
           // Rotating placeholder text
           Expanded(
             child: AnimatedSwitcher(
